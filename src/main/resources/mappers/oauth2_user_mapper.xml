@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.BoardStudyPrep.mapper.OAuth2UserMapper">
+    <resultMap id="OAuth2UserResultMap" type="com.korit.BoardStudyPrep.entity.OAuth2User">
+        <id property="oauth2Id" column="oauth2_id" />
+        <result property="userId" column="user_id" />
+        <result property="provider" column="provider" />
+        <result property="providerUserId" column="provider_user_id" />
+        <result property="createDt" column="create_dt" />
+        <result property="updateDt" column="update_dt" />
+    </resultMap>
+
+    <select id="getOAuth2UserByProviderAndProviderUserId" resultMap="OAuth2UserResultMap">
+        SELECT
+            *
+        FROM
+            oauth2_user_tb
+        WHERE
+            provider = #{provider} AND
+            provider_user_id = #{providerUserId}
+    </select>
+
+    <insert id="addOAuth2User">
+        INSERT INTO
+            oauth2_user_tb (user_id, provider, provider_user_id, create_dt)
+        VALUES
+            (#{userId}, #{provider}, #{providerUserId}, NOW())
+    </insert>
+
+
+</mapper>
