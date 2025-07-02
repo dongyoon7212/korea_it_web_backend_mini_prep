@@ -54,7 +54,7 @@
 
             rt.role_id,
             rt.role_name,
-            rt.role_name_kor,
+            rt.role_name_kor
         from
             user_tb ut
             left outer join user_role_tb urt on (urt.user_id = ut.user_id)
@@ -80,7 +80,7 @@
 
             rt.role_id,
             rt.role_name,
-            rt.role_name_kor,
+            rt.role_name_kor
         from
             user_tb ut
             left outer join user_role_tb urt on (urt.user_id = ut.user_id)
@@ -106,7 +106,7 @@
 
             rt.role_id,
             rt.role_name,
-            rt.role_name_kor,
+            rt.role_name_kor
         from
             user_tb ut
             left outer join user_role_tb urt on (urt.user_id = ut.user_id)
@@ -115,22 +115,14 @@
             ut.email = #{email}
     </select>
 
-<!--    <update id="updateEmail">-->
-<!--        update-->
-<!--            user_tb-->
-<!--        set-->
-<!--            email = #{email}-->
-<!--        where-->
-<!--            user_id = #{userId};-->
-<!--    </update>-->
-
-<!--    <update id="updatePassword">-->
-<!--        update-->
-<!--            user_tb-->
-<!--        set-->
-<!--            password = #{password}-->
-<!--        where-->
-<!--            user_id = #{userId};-->
-<!--    </update>-->
+    <update id="changePassword">
+        update
+            user_tb
+        set
+            password = #{password},
+            update_dt = now()
+        where
+            user_id = #{userId};
+    </update>
 
 </mapper>

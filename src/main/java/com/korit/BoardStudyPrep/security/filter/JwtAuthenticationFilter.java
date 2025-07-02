@@ -1,6 +1,7 @@
 package com.korit.BoardStudyPrep.security.filter;
 
 import com.korit.BoardStudyPrep.entity.User;
+import com.korit.BoardStudyPrep.repository.UserRepository;
 import com.korit.BoardStudyPrep.security.jwt.JwtUtil;
 import com.korit.BoardStudyPrep.security.model.PrincipalUser;
 import io.jsonwebtoken.Claims;

@@ -1,6 +1,9 @@
 package com.korit.BoardStudyPrep.config;
 
 
+import com.korit.BoardStudyPrep.security.filter.JwtAuthenticationFilter;
+import com.korit.BoardStudyPrep.security.handler.OAuth2SuccessHandler;
+import com.korit.BoardStudyPrep.service.OAuth2PrincipalUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final StudyFilter studyFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final OAuth2PrincipalUserService oAuth2PrincipalUserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;

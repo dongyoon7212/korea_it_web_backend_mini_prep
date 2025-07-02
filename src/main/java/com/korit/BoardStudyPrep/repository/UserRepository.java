@@ -35,11 +35,7 @@ public class UserRepository {
         return userMapper.getUserByEmail(email);
     }
 
-//    public int updateEmail(User user) {
-//        return userMapper.updateEmail(user);
-//    }
-//
-//    public int updatePassword(Integer userId, String password) {
-//        return userMapper.updatePassword(userId, password);
-//    }
+    public int changePassword(User user) {
+        return userMapper.changePassword(user);
+    }
 }

@@ -1,4 +1,4 @@
-package com.korit.BoardStudyPrep.dto;
+package com.korit.BoardStudyPrep.dto.account;
 
 import com.korit.BoardStudyPrep.entity.User;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @AllArgsConstructor
-public class SignupReqDto {
-    private String username;
-    private String password;
-    private String email;
+public class ChangePasswordReqDto {
+    private Integer userId;
+    private String oldPassword;
+    private String newPassword;
 
     public User toEntity(BCryptPasswordEncoder bCryptPasswordEncoder) {
         return User.builder()
-                .username(username)
-                .password(bCryptPasswordEncoder.encode(password))
-                .email(email)
+                .userId(userId)
+                .password(bCryptPasswordEncoder.encode(newPassword))
                 .build();
     }
 }
