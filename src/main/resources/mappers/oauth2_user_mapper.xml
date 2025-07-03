@@ -24,6 +24,15 @@
             provider_user_id = #{providerUserId}
     </select>
 
+    <select id="getOAuth2UserByUserId" resultMap="OAuth2UserResultMap">
+        SELECT
+            *
+        FROM
+            oauth2_user_tb
+        WHERE
+            user_id = #{userId}
+    </select>
+
     <insert id="addOAuth2User">
         INSERT INTO
             oauth2_user_tb (user_id, provider, provider_user_id, create_dt)

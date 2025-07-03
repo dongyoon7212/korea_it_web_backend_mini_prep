@@ -44,18 +44,18 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String email = defaultOAuth2User.getAttribute("email");
 
         // 2. provider + providerUserId로 연동된 사용자 있는지 DB 조회 (oauth2_user_tb)
-        OAuth2User oAuth2User = oAuth2UserMapper.getOAuth2UserByProviderAndProviderUserId(provider, providerUserId);
+        Optional<OAuth2User> optionalOAuth2User = oAuth2UserMapper.getOAuth2UserByProviderAndProviderUserId(provider, providerUserId);
 
         // OAuth2 로그인을 통해 회원가입이 되어있지 않은 상태 (연동이 된적이 없는 경우)
         // OAuth2 동기화
-        if (oAuth2User == null) { //죠랄남 개같은거
+        if (optionalOAuth2User.isEmpty()) {
             // oAuth2User 않은 경우: 프론트로 provider 정보와 providerUserId 전달
             response.sendRedirect(clientAddress + "/auth/oauth2?provider=" + provider + "&providerUserId=" + providerUserId + "&email=" + email);
             return;
         }
 
         // 4. 연동된 사용자가 있다면 → userId 기준으로 회원 정보 조회
-        Optional<User> optionalUser = userMapper.getUserByUserId(oAuth2User.getUserId());
+        Optional<User> optionalUser = userMapper.getUserByUserId(optionalOAuth2User.get().getUserId());
 
         // OAuth2 로그인을 통해 회원가입을 진행한 기록이 있는지 (연동이 된 경우)
         // 5. 사용자 정보가 있을 경우 → JWT Access Token 발급

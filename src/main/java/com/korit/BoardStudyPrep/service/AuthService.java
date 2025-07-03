@@ -33,13 +33,15 @@ public class AuthService {
     // Exception 클래스를 포함한 모든 예외 발생 시 롤백되도록 설정
     @Transactional(rollbackFor = Exception.class)
     public ApiRespDto<?> signup(SignupReqDto signupReqDto) {
+        //아이디 중복확인
         Optional<User> userByUsername = userRepository.getUserByUsername(signupReqDto.getUsername());
         if (userByUsername.isPresent()) {
-            return new ApiRespDto<>("failed", "이미 존재하는 아이디 입니다.", null);
+            return new ApiRespDto<>("failed", "이미 사용 중인 아이디입니다.", null);
         }
+        //이메일 중복확인
         Optional<User> userByEmail = userRepository.getUserByEmail(signupReqDto.getEmail());
         if (userByEmail.isPresent()) {
-            return new ApiRespDto<>("failed", "이미 존재하는 이메일 입니다.", null);
+            return new ApiRespDto<>("failed", "이미 사용 중인 이메일입니다.", null);
         }
 
         try {
@@ -52,15 +54,21 @@ public class AuthService {
                 throw new RuntimeException("회원 정보 추가에 실패했습니다.");
             }
 
+            User user = optionalUser.get();
+
             // 사용자 역할(Role) 추가
             UserRole userRole = UserRole.builder()
-                    .userId(optionalUser.get().getUserId())
+                    .userId(user.getUserId())
                     .roleId(3) // 일반 사용자 역할 ID (예시)
                     .build();
-            userRoleRepository.addUserRole(userRole);
+
+            int addUserRoleResult = userRoleRepository.addUserRole(userRole);
+            if (addUserRoleResult != 1) { // 역할 추가 실패 시 롤백 유도
+                throw new RuntimeException("사용자 역할 추가에 실패했습니다.");
+            }
 
             // 모든 작업이 성공적으로 완료되면 성공 응답 반환
-            return new ApiRespDto<>("success", "회원가입 성공", optionalUser.get());
+            return new ApiRespDto<>("success", "회원가입이 성공적으로 완료되었습니다.", user);
 
         } catch (Exception e) {
             // 트랜잭션 내에서 예외 발생 시 자동으로 롤백됩니다.
@@ -72,15 +80,17 @@ public class AuthService {
     public ApiRespDto<?> signin(SigninReqDto signinReqDto) {
         Optional<User> userByUsername = userRepository.getUserByUsername(signinReqDto.getUsername());
         if (userByUsername.isEmpty()) {
-            return new ApiRespDto<>("failed", "사용자 정보를 확인하세요.", null);
+            return new ApiRespDto<>("failed", "아이디 또는 비밀번호가 일치하지 않습니다.", null);
         }
 
-        if (!bCryptPasswordEncoder.matches(userByUsername.get().getPassword(), signinReqDto.getPassword())) {
-            return new ApiRespDto<>("failed", "사용자 정보를 확인하세요.", null);
+        User user = userByUsername.get();
+
+        if (!bCryptPasswordEncoder.matches(signinReqDto.getPassword(), user.getPassword())) {
+            return new ApiRespDto<>("failed", "아이디 또는 비밀번호가 일치하지 않습니다.", null);
         }
 
-        String accessToken = jwtUtil.generateAccessToken(userByUsername.get().getUserId().toString());
-        return new ApiRespDto<>("success", "로그인 성공", accessToken);
+        String accessToken = jwtUtil.generateAccessToken(user.getUserId().toString());
+        return new ApiRespDto<>("success", "로그인이 성공적으로 완료되었습니다.", accessToken);
     }
 
 }

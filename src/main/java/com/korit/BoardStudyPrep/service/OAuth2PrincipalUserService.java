@@ -44,18 +44,18 @@ public class OAuth2PrincipalUserService extends DefaultOAuth2UserService {
                 id = attributes.get("sub").toString();
                 email = (String) attributes.get("email");
                 break;
-//            case "naver":
-//                // Naver는 "response" 안에 유저 정보가 있음
-//                Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-//                id = response.get("id").toString();
-//                email = (String) response.get("email");
-//                break;
-//            case "kakao":
-//                // Kakao는 최상위에 "id", 그리고 "kakao_account" 안에 "email"이 있음
-//                id = attributes.get("id").toString();
-//                Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-//                email = (String) kakaoAccount.get("email");
-//                break;
+            case "naver":
+                // Naver는 "response" 안에 유저 정보가 있음
+                Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+                id = response.get("id").toString();
+                email = (String) response.get("email");
+                break;
+            case "kakao":
+                // Kakao는 최상위에 "id", 그리고 "kakao_account" 안에 "email"이 있음
+                id = attributes.get("id").toString();
+                Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+                email = (String) kakaoAccount.get("email");
+                break;
         }
 
         // 6. 우리가 필요한 정보만 골라 새롭게 attributes 구성 (정리된 형태)
