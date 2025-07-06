@@ -22,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody SigninReqDto signinReqDto) {
-        return ResponseEntity.ok(authService);
+        return ResponseEntity.ok(authService.signin(signinReqDto));
     }
 
     @GetMapping("/principal")

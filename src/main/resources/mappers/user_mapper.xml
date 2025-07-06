@@ -9,7 +9,6 @@
         <id property="roleId" column="role_id"/>
         <result property="roleName" column="role_name"/>
         <result property="roleNameKor" column="role_name_kor"/>
-        <result property="createDt" column="create_dt"/>
     </resultMap>
 
     <resultMap id="UserRoleResultMap" type="com.korit.BoardStudyPrep.entity.UserRole">
